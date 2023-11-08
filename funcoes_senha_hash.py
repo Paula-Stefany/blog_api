@@ -46,8 +46,8 @@ def obter_senha_hash_original_admin(admin_atual, cursor):
     id_admin = admin_atual.get('id_admin')
     comando = 'select senha_hash from administradores where id_admin = %s'
     cursor.execute(comando, (id_admin,))
-    autor = cursor.fetchone()
-    senha_hash = autor['senha_hash']
+    admin = cursor.fetchone()
+    senha_hash = admin['senha_hash']
 
     return senha_hash
 
