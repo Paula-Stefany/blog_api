@@ -38,7 +38,7 @@ def configurar_rotas(app):
                 return jsonify({'administradores': administradores}), 200
 
         except Exception as erro:
-            return jsonify({'erro': str(erro)})
+            return jsonify({'erro': str(erro)}), 500
 
     @app.route('/admin/<string:nome_admin>', methods=['GET'])
     @token_obrigatorio
@@ -61,7 +61,7 @@ def configurar_rotas(app):
                 return jsonify({'administrador': dados_admin}), 200
 
         except Exception as erro:
-            return jsonify({'erro': str(erro)}), 400
+            return jsonify({'erro': str(erro)}), 500
 
     @app.route('/historico_autor/<string:nome_autor>', methods=['GET'])
     @token_obrigatorio
@@ -80,7 +80,7 @@ def configurar_rotas(app):
                 return jsonify({'histórico': historico_autor}), 200
 
         except Exception as erro:
-            return jsonify({'erro': str(erro)})
+            return jsonify({'erro': str(erro)}), 500
 
     @app.route('/admin', methods=['POST'])
     @token_obrigatorio
@@ -113,7 +113,7 @@ def configurar_rotas(app):
                 return jsonify({'mensagem': "email enviado com sucesso"}), 200
 
         except Exception as erro:
-            return jsonify({'erro': str(erro)})
+            return jsonify({'erro': str(erro)}), 500
 
     @app.route('/admin/<string:nome_admin>', methods=['PUT'])
     @token_obrigatorio
@@ -153,7 +153,7 @@ def configurar_rotas(app):
                 return jsonify({'mensagem': 'modificações feitas com sucesso'}), 201
 
         except Exception as erro:
-            return jsonify({'erro': str(erro)})
+            return jsonify({'erro': str(erro)}), 500
 
     @app.route('/admin/<string:nome_admin>/', methods=['DELETE'])
     @token_obrigatorio
@@ -178,7 +178,7 @@ def configurar_rotas(app):
                 return jsonify({'mensagem': 'administrador excluído com sucesso'}), 200
 
         except Exception as erro:
-            return jsonify({'erro': str(erro)})
+            return jsonify({'erro': str(erro)}), 500
 
     @app.route('/admin/excluir_autor/<int:id_autor>', methods=['DELETE'])
     @token_obrigatorio
@@ -200,7 +200,7 @@ def configurar_rotas(app):
                 return jsonify({'mensagem': 'autor excluído com sucesso!'}), 200
 
         except Exception as erro:
-            return jsonify({'erro': str(erro)})
+            return jsonify({'erro': str(erro)}), 500
 
     @app.route('/admin/excluir_postagem/<int:id_postagem>', methods=['DELETE'])
     @token_obrigatorio
@@ -220,4 +220,4 @@ def configurar_rotas(app):
                 return jsonify({'mensagem': 'postagem excluída com sucesso'}), 200
 
         except Exception as erro:
-            return jsonify({'erro': str(erro)})
+            return jsonify({'erro': str(erro)}), 500
