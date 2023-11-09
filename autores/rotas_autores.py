@@ -18,7 +18,7 @@ def configurar_rotas(app):
             with app.conexao_bd.cursor(dictionary=True) as cursor:
                 autores = obter_dados_basicos_autores(cursor)
                 if not autores:
-                    return jsonify({"mensagem": "nenhum autor encontrado"}), 404
+                    return jsonify({'mensagem': 'nenhum autor encontrado'}), 404
 
                 return jsonify({'autores': autores}), 200
 
@@ -37,7 +37,7 @@ def configurar_rotas(app):
                 return jsonify({'autor': autor}), 200
 
         except Exception as erro:
-            return jsonify({"erro": str(erro)}), 500
+            return jsonify({'erro': str(erro)}), 500
 
     @app.route('/autores', methods=['POST'])
     @token_obrigatorio
@@ -77,11 +77,11 @@ def configurar_rotas(app):
 
                 autor = obter_dados_completos_autor(id_autor, nome_autor, cursor)
                 if not autor:
-                    return jsonify({"mensagem": "dados inválidos, voce só pode editar seus próprios dados"}), 400
+                    return jsonify({'mensagem': 'dados inválidos, voce só pode editar seus próprios dados'}), 400
 
                 modificacoes = request.get_json()
                 if not modificacoes:
-                    return jsonify({"mensagem": "Você precisa digitar seus dados"}), 400
+                    return jsonify({'mensagem': 'Você precisa digitar seus dados'}), 400
 
                 partes_comando_sql = []
                 valores = []
@@ -102,7 +102,7 @@ def configurar_rotas(app):
                 return jsonify({'mensagem': 'auteração feita com sucesso'}), 201
 
         except Exception as erro:
-            return jsonify({"erro": str(erro)}), 500
+            return jsonify({'erro': str(erro)}), 500
 
     @app.route('/autores/<string:nome_autor>', methods=['DELETE'])
     @token_obrigatorio
@@ -115,12 +115,12 @@ def configurar_rotas(app):
 
                 autor = obter_dados_completos_autor(id_autor, nome_autor, cursor)
                 if not autor:
-                    return jsonify({"mensagem": "autor não encontrado"}), 404
+                    return jsonify({'mensagem': 'autor não encontrado'}), 404
 
                 deletar_todas_postagens_de_um_autor(id_autor, cursor, app.conexao_bd)
 
                 deletar_autor(id_autor, nome_autor, cursor, app.conexao_bd)
-                return jsonify({"mensagem": "autor excluído com sucesso"}), 200
+                return jsonify({'mensagem': 'autor excluído com sucesso'}), 200
 
         except Exception as erro:
-            return jsonify({"erro": str(erro)}), 500
+            return jsonify({'erro': str(erro)}), 500

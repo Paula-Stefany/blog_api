@@ -141,7 +141,7 @@ def configurar_rotas(app):
 
                 adicionar_comandos_sql_admins(partes_sql, valores, modificacoes, administrador, cursor)
                 if not partes_sql:
-                    return jsonify({"mensagem": "dados repetidos"}), 400
+                    return jsonify({'mensagem': 'dados repetidos'}), 400
 
                 valores.append(id_admin)
 
@@ -214,7 +214,7 @@ def configurar_rotas(app):
 
                 postagem = obter_postagem_pelo_id_postagem(id_postagem, cursor)
                 if not postagem:
-                    return jsonify({"mensagem": "postagem não encontrada"}), 404
+                    return jsonify({'mensagem': 'postagem não encontrada'}), 404
 
                 deletar_postagem_pelo_id_postagem(id_postagem, cursor, app.conexao_bd)
                 return jsonify({'mensagem': 'postagem excluída com sucesso'}), 200

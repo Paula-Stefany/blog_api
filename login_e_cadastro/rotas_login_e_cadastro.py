@@ -21,13 +21,13 @@ def configurar_rotas(app):
                 id_usuario, tipo_usuario = conferir_dados_login(email, senha, cursor)
 
                 if id_usuario is None or tipo_usuario is None:
-                    return jsonify({"mensagem": "ceredenciais inválidas"}), 400
+                    return jsonify({'mensagem': 'ceredenciais inválidas'}), 400
 
                 token = gerar_token(id_usuario, tipo_usuario)
-                return jsonify({"token": token}), 200
+                return jsonify({'token': token}), 200
 
         except Exception as erro:
-            return jsonify({"erro": str(erro)}), 500
+            return jsonify({'erro': str(erro)}), 500
 
     @app.route('/cadastro_autor', methods=['GET', 'POST'])
     def cadastro_novo_autor():
@@ -37,7 +37,7 @@ def configurar_rotas(app):
 
                 token = request.args.get('token')
                 if not token:
-                    return jsonify({"mensagem": "token ausente"}), 404
+                    return jsonify({'mensagem': 'token ausente'}), 404
                 resultado, mensagem, token_jwt = validar_token(token)
                 if not resultado:
                     return jsonify({'mensagem': mensagem}), 400
@@ -63,10 +63,10 @@ def configurar_rotas(app):
                 inserir_novo_autor(novo_autor['nome'], novo_autor['email'], novo_autor['biografia'],
                                    salt, senha_hash, cursor, app.conexao_bd)
 
-                return jsonify({"mensagem": "autor inserido com sucesso"}), 201
+                return jsonify({'mensagem': 'autor inserido com sucesso'}), 201
 
         except Exception as erro:
-            return jsonify({"erro": str(erro)}), 500
+            return jsonify({'erro': str(erro)}), 500
 
     @app.route('/cadastro_admin', methods=['GET', 'POST'])
     def registrar_novo_admin():
@@ -76,7 +76,7 @@ def configurar_rotas(app):
 
                 token = request.args.get('token')
                 if not token:
-                    return jsonify({"mensagem": "token ausente"}), 404
+                    return jsonify({'mensagem": "token ausente'}), 404
 
                 resultado, mensagem, token_jwt = validar_token(token)
                 if not resultado:
