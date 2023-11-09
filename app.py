@@ -8,7 +8,6 @@ from admin_especial.rota_admin_especial import configurar_rotas as configurar_ro
 
 
 app = Flask(__name__)
-
 app.conexao_bd = conexao_bd_mysql()
 
 

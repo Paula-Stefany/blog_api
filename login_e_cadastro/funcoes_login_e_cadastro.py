@@ -73,9 +73,7 @@ def verificar_se_email_admin_ja_existe_no_banco(email, cursor):
     comando = 'select * from administradores where email = %s'
     cursor.execute(comando, (email,))
     email = cursor.fetchone()
-    if email:
-        return email
-    return None
+    return email
 
 
 def verificar_se_email_autor_ja_existe_no_banco(email, cursor):
@@ -83,6 +81,4 @@ def verificar_se_email_autor_ja_existe_no_banco(email, cursor):
     comando = 'select * from autores where email = %s'
     cursor.execute(comando, (email,))
     email = cursor.fetchone()
-    if email:
-        return email
-    return None
+    return email

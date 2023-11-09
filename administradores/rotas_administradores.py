@@ -1,6 +1,7 @@
 from funcoes_token import token_obrigatorio, gerar_token_autor_admin
 from flask import request, jsonify
-from postagens.funcoes_postagens import deletar_postagem_pelo_id_postagem, deletar_todas_postagens_de_um_autor
+from postagens.funcoes_postagens import (deletar_postagem_pelo_id_postagem, deletar_todas_postagens_de_um_autor,
+                                         obter_postagem_pelo_id_postagem)
 from funcao_enviar_email import enviar_email
 from funcoes_validacao_dados import validacao_modificacoes_admin, validar_email
 from funcoes_comandos_sql import adicionar_comandos_sql_admins
@@ -26,15 +27,15 @@ def configurar_rotas(app):
             with app.conexao_bd.cursor(dictionary=True) as cursor:
 
                 if perfil != 'administrador':
-                    return jsonify({'mensagem': 'acesso negado'})
+                    return jsonify({'mensagem': 'acesso negado'}), 403
 
                 admin_especial = verificar_admin_especial(id_admin, email_admin_especial, cursor)
                 if not admin_especial:
-                    return jsonify({'mensagem': 'acesso restrito'})
+                    return jsonify({'mensagem': 'acesso restrito'}), 403
 
                 administradores = obter_dados_administradores(cursor)
 
-                return jsonify({'administradores': administradores})
+                return jsonify({'administradores': administradores}), 200
 
         except Exception as erro:
             return jsonify({'erro': str(erro)})
@@ -47,20 +48,20 @@ def configurar_rotas(app):
             with app.conexao_bd.cursor(dictionary=True) as cursor:
 
                 if perfil != 'administrador':
-                    return jsonify({'mensagem': 'acesso negado'})
+                    return jsonify({'mensagem': 'acesso negado'}), 403
 
                 admin_especial = verificar_admin_especial(id_admin, email_admin_especial, cursor)
                 if not admin_especial:
-                    return jsonify({'mensagem': 'acesso restrito'})
+                    return jsonify({'mensagem': 'acesso restrito'}), 403
 
                 dados_admin = obter_dados_admin_unico(nome_admin, cursor)
                 if not dados_admin:
-                    return jsonify({'mensagem': 'administrador não encontrado!'})
+                    return jsonify({'mensagem': 'administrador não encontrado!'}), 404
 
-                return jsonify({'administrador': dados_admin})
+                return jsonify({'administrador': dados_admin}), 200
 
         except Exception as erro:
-            return jsonify({'erro': str(erro)})
+            return jsonify({'erro': str(erro)}), 400
 
     @app.route('/historico_autor/<string:nome_autor>', methods=['GET'])
     @token_obrigatorio
@@ -70,13 +71,13 @@ def configurar_rotas(app):
             with app.conexao_bd.cursor(dictionary=True) as cursor:
 
                 if perfil != 'administrador':
-                    return jsonify({'mensagem': 'acesso negado'})
+                    return jsonify({'mensagem': 'acesso negado'}), 403
 
                 historico_autor = obter_historico_autor(nome_autor, cursor)
                 if not historico_autor:
-                    return jsonify({'mensagem': 'autor não encontrado'})
+                    return jsonify({'mensagem': 'autor não encontrado'}), 404
 
-                return jsonify({'histórico': historico_autor})
+                return jsonify({'histórico': historico_autor}), 200
 
         except Exception as erro:
             return jsonify({'erro': str(erro)})
@@ -89,17 +90,17 @@ def configurar_rotas(app):
             with app.conexao_bd.cursor(dictionary=True) as cursor:
 
                 if perfil != 'administrador':
-                    return jsonify({'mensagem': 'acesso negado'})
+                    return jsonify({'mensagem': 'acesso negado'}), 403
 
                 administrador = verificar_admin_especial(id_admin, email_admin_especial, cursor)
                 if not administrador:
-                    return jsonify({'mensagem': 'acesso restrito!'})
+                    return jsonify({'mensagem': 'acesso restrito!'}), 403
 
                 novo_administrador_email = request.get_json()
                 email_novo_admin = novo_administrador_email .get('email')
 
                 if not validar_email(email_novo_admin):
-                    return jsonify({'mensagem': 'dados inválidos'})
+                    return jsonify({'mensagem': 'dados inválidos'}), 400
 
                 token = gerar_token_autor_admin(email_novo_admin)
                 convite = f'http://localhost:5050/cadastro_admin?token={token}'
@@ -109,7 +110,7 @@ def configurar_rotas(app):
 
                 enviar_email(destinatario, assunto, conteudo)
 
-                return jsonify({'mensagem': "email enviado com sucesso"})
+                return jsonify({'mensagem': "email enviado com sucesso"}), 200
 
         except Exception as erro:
             return jsonify({'erro': str(erro)})
@@ -122,25 +123,25 @@ def configurar_rotas(app):
             with app.conexao_bd.cursor(dictionary=True) as cursor:
 
                 if perfil != 'administrador':
-                    return jsonify({'mensagem': 'acesso negado'})
+                    return jsonify({'mensagem': 'acesso negado'}), 403
 
                 administrador = verificar_permicao_administrador(id_admin, nome_admin, cursor)
                 if not administrador:
-                    return jsonify({'mensagem': 'Acesso negado'})
+                    return jsonify({'mensagem': 'Acesso negado'}), 403
 
                 modificacoes = request.get_json()
                 if not modificacoes:
-                    return jsonify({'mensagem': 'voce precisa digitar os dados'})
+                    return jsonify({'mensagem': 'voce precisa digitar os dados'}), 400
 
                 if not validacao_modificacoes_admin(modificacoes):
-                    return jsonify({'mensagem': 'dados inválidos'})
+                    return jsonify({'mensagem': 'dados inválidos'}), 400
 
                 partes_sql = []
                 valores = []
 
                 adicionar_comandos_sql_admins(partes_sql, valores, modificacoes, administrador, cursor)
                 if not partes_sql:
-                    return jsonify({"mensagem": "dados repetidos"})
+                    return jsonify({"mensagem": "dados repetidos"}), 400
 
                 valores.append(id_admin)
 
@@ -149,7 +150,7 @@ def configurar_rotas(app):
                 cursor.execute(comando_modificacao, (*valores, nome_admin))
                 app.conexao_bd.commit()
 
-                return jsonify({'mensagem': 'modificações feitas com sucesso'})
+                return jsonify({'mensagem': 'modificações feitas com sucesso'}), 201
 
         except Exception as erro:
             return jsonify({'erro': str(erro)})
@@ -162,19 +163,19 @@ def configurar_rotas(app):
             with app.conexao_bd.cursor(dictionary=True) as cursor:
 
                 if perfil != 'administrador':
-                    return jsonify({'mensagem': 'acesso negado'})
+                    return jsonify({'mensagem': 'acesso negado'}), 403
 
                 administrador_especial = verificar_admin_especial(id_admin, email_admin_especial, cursor)
                 if not administrador_especial:
-                    return jsonify({'mensagem': 'acesso restrito'})
+                    return jsonify({'mensagem': 'acesso restrito'}), 403
 
                 admin_a_ser_exluido = obter_dados_basicos_admin(nome_admin, cursor)
                 if not admin_a_ser_exluido:
-                    return jsonify({'mensagem': 'administrador não encontrado'})
+                    return jsonify({'mensagem': 'administrador não encontrado'}), 404
 
                 deletar_administrador(nome_admin, cursor, app.conexao_bd)
 
-                return jsonify({'mensagem': 'administrador excluído com sucesso'})
+                return jsonify({'mensagem': 'administrador excluído com sucesso'}), 200
 
         except Exception as erro:
             return jsonify({'erro': str(erro)})
@@ -187,16 +188,16 @@ def configurar_rotas(app):
             with app.conexao_bd.cursor(dictionary=True) as cursor:
 
                 if perfil != 'administrador':
-                    return jsonify({'mensagem': 'acesso restrito'})
+                    return jsonify({'mensagem': 'acesso restrito'}), 403
 
                 autor = verificar_existencia_do_autor(id_autor, cursor)
                 if not autor:
-                    return jsonify({"mensagem": "autor inexistente"})
+                    return jsonify({"mensagem": "autor não encontrado"}), 404
 
                 deletar_todas_postagens_de_um_autor(id_autor, cursor, app.conexao_bd)
                 deletar_autor_pelo_id(id_autor, cursor, app.conexao_bd)
 
-                return jsonify({'mensagem': 'autor excluído com sucesso!'})
+                return jsonify({'mensagem': 'autor excluído com sucesso!'}), 200
 
         except Exception as erro:
             return jsonify({'erro': str(erro)})
@@ -209,10 +210,14 @@ def configurar_rotas(app):
             with app.conexao_bd.cursor(dictionary=True) as cursor:
 
                 if perfil != 'administrador':
-                    return jsonify({'mensagem': 'acesso restrito'})
+                    return jsonify({'mensagem': 'acesso restrito'}), 403
+
+                postagem = obter_postagem_pelo_id_postagem(id_postagem, cursor)
+                if not postagem:
+                    return jsonify({"mensagem": "postagem não encontrada"}), 404
 
                 deletar_postagem_pelo_id_postagem(id_postagem, cursor, app.conexao_bd)
-                return jsonify({'mensagem': 'postagem excluída com sucesso'})
+                return jsonify({'mensagem': 'postagem excluída com sucesso'}), 200
 
         except Exception as erro:
             return jsonify({'erro': str(erro)})

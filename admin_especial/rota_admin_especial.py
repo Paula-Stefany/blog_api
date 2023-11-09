@@ -12,7 +12,7 @@ def configurar_rotas(app):
         """ A idéia dessa rota é usá-la apenas 1 vez, no caso, quando inserirmos o administrador especial, e depois
          excluí-la ou deixá-la comentada. Também pegaremos o email do administrador especial e colocaremos no arquivo
          .env manualmente ex: EMAIL_ADMIN_ESPECIAL = 'email do admin especial'  porque será a forma que identificaremos
-         o administrador especial dentro da tabela administradores que contém o email unique """
+         o administrador especial dentro da tabela administradores que contém o email como sendo unique """
 
         try:
 
@@ -20,10 +20,10 @@ def configurar_rotas(app):
             email_administrador_especial = administrador_especial.get('email')
 
             if not email_administrador_especial:
-                return jsonify({'mensagem': 'Voce precisa inserir seus dados!'})
+                return jsonify({'mensagem': 'email não encontrado!'}), 404
 
             if not validar_email(email_administrador_especial):
-                return jsonify({'mensagem': 'Email inválido'})
+                return jsonify({'mensagem': 'Email inválido'}), 400
 
             token = gerar_token_autor_admin(email_administrador_especial)
             convite = f'http://localhost:5050/cadastro_admin?token={token}'
@@ -33,7 +33,7 @@ def configurar_rotas(app):
 
             enviar_email(destinatario, assunto, conteudo)
 
-            return jsonify({'mensagem': 'email enviado com sucesso!'})
+            return jsonify({'mensagem': 'email enviado com sucesso!'}), 200
 
         except Exception as erro:
-            return jsonify({'erro': str(erro)})
+            return jsonify({'erro': str(erro)}), 500

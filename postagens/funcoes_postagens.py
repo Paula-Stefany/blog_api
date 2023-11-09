@@ -13,8 +13,6 @@ def obter_postagem_pelo_autor(nome_autor, cursor):
                'p.id_autor where a.nome = %s')
     cursor.execute(comando, (nome_autor,))
     postagens = cursor.fetchall()
-    if not postagens:
-        return False
     return postagens
 
 
@@ -23,10 +21,16 @@ def obter_postagem_pelo_titulo(titulo_postagem, cursor):
     comando = ('select a.nome, p.titulo, p.assunto from autores as a inner join postagens as p'
                ' on a.id_autor = p.id_autor where titulo = %s')
     cursor.execute(comando, (titulo_postagem,))
-    postagens = cursor.fetchone()
-    if not postagens:
-        return False
+    postagens = cursor.fetchall()
     return postagens
+
+
+def obter_postagem_pelo_id_postagem(id_postagem, cursor):
+
+    comando = 'select * from postagens where id_postagem = %s'
+    cursor.execute(comando, (id_postagem,))
+    postagem = cursor.fetchone()
+    return postagem
 
 
 def inserir_nova_postagem(id_autor, titulo, assunto, cursor, conexao):
@@ -47,8 +51,6 @@ def obter_postagem_completa_do_autor(id_autor, titulo, cursor):
                ' p.id_autor = %s ')
     cursor.execute(comando, (titulo, id_autor))
     postagem = cursor.fetchone()
-    if not postagem:
-        return False
     return postagem
 
 
