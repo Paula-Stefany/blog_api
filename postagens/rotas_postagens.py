@@ -22,7 +22,7 @@ def configurar_rotas(app):
                 return jsonify({'Postagens': postagens}), 200
 
         except Exception as erro:
-            return jsonify({"erro": str(erro)}), 500
+            return jsonify({'erro': str(erro)}), 500
 
     @app.route('/postagem/titulo/<string:titulo_postagem>', methods=['GET'])
     def obter_postagem_por_titulo(titulo_postagem):
