@@ -1,8 +1,8 @@
 # blog_api
 
-API de Blog
-Esta é uma API de blog desenvolvida em Flask, com funcionalidades abrangentes para gerenciar autores, postagens e
-administradores. A API oferece endpoints para realizar operações CRUD (Criar, Ler, Atualizar, Excluir) em diferentes 
+API de Blog  
+Esta é uma API de blog desenvolvida em Flask, com funcionalidades abrangentes para gerenciar autores, postagens e  
+administradores. A API oferece endpoints para realizar operações CRUD (Criar, Ler, Atualizar, Excluir) em diferentes  
 entidades.
 
 Autorização
@@ -12,13 +12,13 @@ obter um token através das rotas apropriadas.
 
 Administrador especial
 
-Inserir o administrador especial:
-Endpoint: /admin_especial
-Método: POST
-Descrição: Inseri o administrador especial, que é quem tem mais autoridade entre os administradores, o administrador 
-especial pode por exemplo, excluir outros administradores, coisa que os outros não podem. A idéia dessa rota é usá-la 
-apenas uma vez, pois ela não possui um token obrigatório, ou seja, não tem proteção, é só para inserir o administrador
-especial mesmo, e assim ele conseguir fazer o login para ter acesso aos recursos disponíveis, como inserir autores, etc.
+Inserir o administrador especial:  
+Endpoint: /admin_especial  
+Método: POST  
+Descrição: Inseri o administrador especial, que é quem tem mais autoridade entre os administradores, o administrador  
+especial pode por exemplo, excluir outros administradores, coisa que os outros não podem. A idéia dessa rota é usá-la   
+apenas uma vez, pois ela não possui um token obrigatório, ou seja, não tem proteção, é só para inserir o administrador  
+especial mesmo, e assim ele conseguir fazer o login para ter acesso aos recursos disponíveis, como inserir autores, etc.  
 
 Login e Cadastro
 
@@ -141,7 +141,7 @@ Descrição: Permite a um administrador excluir a postagem de um autor.
 Configuração
 Certifique-se de intalar todas as dependências presentes no arquivo requirements.txt, também foi usado o Mysql
 workbench para criar o banco de dados blog e as tabelas autores, postagens e administradores. Acesse o arquivo
-create_database.sql para conferir os comandos de criação do banco de dadosd e das tabelas.
+create_database.sql para conferir os comandos de criação do banco de dados e das tabelas.
 
 Contribuição
 Contribuições são bem-vindas! Se você encontrar problemas ou tiver sugestões para melhorar a API, sinta-se à vontade 
