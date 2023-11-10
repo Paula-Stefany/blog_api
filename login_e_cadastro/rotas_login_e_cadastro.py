@@ -38,6 +38,7 @@ def configurar_rotas(app):
                 token = request.args.get('token')
                 if not token:
                     return jsonify({'mensagem': 'token ausente'}), 404
+
                 resultado, mensagem, token_jwt = validar_token(token)
                 if not resultado:
                     return jsonify({'mensagem': mensagem}), 400

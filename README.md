@@ -5,10 +5,37 @@ Esta é uma API de blog desenvolvida em Flask, com funcionalidades abrangentes p
 administradores. A API oferece endpoints para realizar operações CRUD (Criar, Ler, Atualizar, Excluir) em diferentes 
 entidades.
 
-Endpoints Principais
 Autorização
+
 Para acessar determinados endpoints, é necessário incluir um token válido no cabeçalho da solicitação. Certifique-se de
 obter um token através das rotas apropriadas.
+
+Administrador especial
+
+Inserir o administrador especial:
+Endpoint: /admin_especial
+Método: POST
+Descrição: Inseri o administrador especial, que é quem tem mais autoridade entre os administradores, o administrador 
+especial pode por exemplo, excluir outros administradores, coisa que os outros não podem. A idéia dessa rota é usá-la 
+apenas uma vez, pois ela não possui um token obrigatório, ou seja, não tem proteção, é só para inserir o administrador
+especial mesmo, e assim ele conseguir fazer o login para ter acesso aos recursos disponíveis, como inserir autores, etc.
+
+Login e Cadastro
+
+Fazer Login. Através do login fazemos a autenticação e geramos o token caso a autenticação seja feita com sucesso.
+Endpoint: /login
+Método: POST
+Descrição: Autentica um usuário com email e senha. Retorna um token de acesso para operações subsequentes.
+    
+Cadastro Novo Autor
+Endpoint: /cadastro
+Método: GET, POST
+Descrição: Registra um novo autor no sistema, caso ele possua o token.
+
+Cadastro Novos Administradores
+Endpoint: /cadastro_admin
+Método: GET, POST
+Descrição: Registra um novo administrador no sistema, caso ele possua o token.
 
 Autores
 
@@ -114,7 +141,7 @@ Descrição: Permite a um administrador excluir a postagem de um autor.
 Configuração
 Certifique-se de intalar todas as dependências presentes no arquivo requirements.txt, também foi usado o Mysql
 workbench para criar o banco de dados blog e as tabelas autores, postagens e administradores. Acesse o arquivo
-create_database_sql para conferir os comandos de criação do banco de dados e das tabelas.
+create_database.sql para conferir os comandos de criação do banco de dadosd e das tabelas.
 
 Contribuição
 Contribuições são bem-vindas! Se você encontrar problemas ou tiver sugestões para melhorar a API, sinta-se à vontade 
